@@ -141,9 +141,6 @@ Template is missing programs.<br>
 * 27*must not link_to other-user's book-edit<br>
     fix → <%= link_to edit_user_path(user), class: "btn btn-outline-secondary btn-block edit_user_#{user.id}" do %><...><% end %><br>
     (at users/_info.html.erb)<br>
-<br>
-
-
 
 
 # +α like_it/comment_function
