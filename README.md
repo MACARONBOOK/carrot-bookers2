@@ -52,22 +52,29 @@ Template is missing programs.<br>
    check js files(webpack/environments.js)(stylesheets/application.scss)(packs/application.js)<br>
 
 * 5*cannot display except header<br>
-   application.html.erb → yield-tag(next to flashmessage)
+   application.html.erb → yield-tag(next to flashmessage)<br>
 <br>
 
 -- Before sign up --
 <br>
-* 6*
+* 6*cannot jump to home or about<br>
+   AppCon → add except[:top, :about] to before_action
 
-* 7*
+* 7*NameError in Homes#top<br>
+   rails routes → new_user_session_path, new_user_registration_path(change at top.html)<br>
+<br>
 
 -- Sign up(on time) --
 <br>
-* 8*
+* 8*NoMethodError undefined method 'name-field'<br>
+   registrations/new → change to text_field
 
-* 9*
-
-* 10*
+* 9*cannot sign-up (display: book must exist)<br>
+   association → has_many :books,dependent: :destroy  //  belongs_to :user<br>
+                 
+* 10*after sign-up, jump to top-page<br>
+    after_sign_path_for → change path to user_path(resource)<br>
+<br>
 
 -- users/index --
 <br>
