@@ -126,13 +126,23 @@ Template is missing programs.<br>
 
 -- others --
 <br>
-* 23*
+* 23*when edit user-data, cannot validate column'introduction'<br>
+    add → validates :introduction, length:{maximum:50}
 
-* 24*
+* 24*must not edit other-user's profile<br>
+    add edit → before_action :ensure_correct_user, only: [:update]
 
-* 25*
+* 25*show edit&destroy, if submitted-user is log-in-user<br>
+    pick → <% if @user == current_user %>...button(edit,destroy)...<% end %>  (on books/show)
 
-* 26*
+* 26*cannot display error-message, when book-edit is failure<br>
+    add to books/edit → <%= render 'layouts/errors', obj: @book %>
 
-* 27*
+* 27*must not link_to other-user's book-edit<br>
+    fix → <%= link_to edit_user_path(user), class: "btn btn-outline-secondary btn-block edit_user_#{user.id}" do %><...><% end %><br>
+    (at users/_info.html.erb)<br>
+<br>
+
+
+
 
