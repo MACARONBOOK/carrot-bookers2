@@ -78,35 +78,51 @@ Template is missing programs.<br>
 
 -- users/index --
 <br>
-* 11*
+* 11*Missing Template
+    not users, 'books/form'
 
-* 12*
+* 12*cannot display by bootstrap(side by side)
+    copy style like users/show(container,row,col)
+<br>
 
 -- users/edit --
 <br>
-* 13*
+* 13*define errors at edit-action → @user=User.find(params[:id])<br>
+　　 *not exist column'title' → change title to name on edit-action
 
-* 14*
+* 14*get url /user.1<br>
+    update-action → redirect_to user_path(@user)
 
-* 15*
+* 15*decide render-action → render :edit (at update-action)
+<br>
 
 -- books/index --
 <br>
-* 16*
+* 16*cannot send data by form(did you define @books and @book?)<br>
+    @book=Book.new (index-action)
 
-* 17*
+* 17*missing error-message<br>
+    add to books/index.show,users/index.show → <%= render 'layouts/errors', obj: @book %>
 
-* 18*
+* 18*when fill form and enter, appear "Body can't blank"<br>
+    permit body at strong-parameter(BookCon)
+<br>   
 
 -- books/show --
 <br>
-* 19*
+* 19*NameError in Books#show, undefined local variable or method'user'<br>
+    add argument at render → <%= render 'users/info', user: @user %>
 
-* 20*
+* 20*NoMethodError in Books#show, undefined method 'get_profile_image' for ....<br>
+    user.rb → has_one_attached :profile_image // get_profile_image method 
 
-* 21*
+* 21*change form edit to new<br>
+    take empty-model → @new_book=Book.new(BookCon)<br>
+    take this value → <%= render 'users/list', user: @user ,book: @new_book %> (at books/show)
 
-* 22*
+* 22*cannot delete submitted-book<br>
+    fix miss → @book→book, book.destroy (at destroy-action)
+<br>
 
 -- others --
 <br>
