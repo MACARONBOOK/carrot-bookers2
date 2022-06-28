@@ -16,4 +16,8 @@ class User < ApplicationRecord
     (profile_image.attached?) ? profile_image : 'no_image.jpg'
   end
 
+  def favorited_by?(book_id)
+    favorites.where(book_id: book_id).exists?
+  end
+
 end

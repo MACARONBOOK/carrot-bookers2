@@ -1,0 +1,2 @@
+alert('いいねが出来ている');
+$('#favorites_buttons_<%= @book.id %>').html("<%= j(render partial: 'favorites/favorite', locals: {book: @book}) %>");

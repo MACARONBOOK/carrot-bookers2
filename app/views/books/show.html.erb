@@ -18,25 +18,9 @@
           </td>
           <td><%= link_to @book.title, @book %></td>
           <td><%= @book.body %></td>
-
-          <% if @book.favorite?(current_user) %>
-            <td>
-            <%= link_to destroy_favorite_path(@book), method: :delete do %>
-              <i class="fas fa-heart unlike-btn"></i><%= @book.favorites.count %>
-            <% end %>
-            </td>
-          <% else %>
-            <td>
-            <%= link_to create_favorite_path(@book), method: :post do %>
-              <i class="far fa-heart like-btn"></i><%= @book.favorites.count %>
-            <% end %>
-            </td>
-          <% end %>
-
-          <% if @user == current_user %>
-            <td><%= link_to 'Edit', edit_book_path(@book), class: "btn btn-sm btn-success edit_book_#{@book.id}" %></td>
-            <td><%= link_to 'Destroy', book_path(@book), method: :delete, data: { confirm: '本当に消しますか？' }, class: "btn btn-sm btn-danger destroy_book_#{@book.id}"%></td>
-          <% end %>
+          <div id="favorites_buttons_<%= book.id %>">
+            <%= render partial: 'favorites/favorite', locals: {book: book} %>
+          </div>
         </tr>
       </table>
     </div>
