@@ -144,3 +144,43 @@ Template is missing programs.<br>
 
 
 # +α like_it/comment_function
+
+-- Like it --
+* create model<br>
+   rails g model Favorite user_id:integer book_id:integer<br>
+   → rails db:migrate
+   
+* association 3model<br>
+  user<favorite  book<favorite <br>
+  add each other (belongs_to // has_many dependent: :destroy)
+  
+* favorited_by method at book.rb
+
+* resource add at routing<br>
+caution! → I use original-route to create/destroy<br>
+  post 'favorite/:id' => 'favorites#create', as: 'create_favorite'<br>
+  delete 'favorite/:id' => 'favorites#destroy', as: 'destroy_favorite'
+
+* create controller<br>
+  rails g controller favorites
+  
+* write before-action, create/destroy-action, strong-parameter
+
+* write on books/index,show(where want to display like-it)<br>
+  location: into each(example is without <>)<br>
+  div id="likes_buttons_<%= post.id %>"<br>
+   %= render partial: 'favorites/favorite', locals: {book: book} %  ←formal template<br>
+  /div
+ 
+* template(create _favorites.html.erb) <br>
+  elements: if user_signed_in? // current_user.favorited_by? // book.favorites.count<br>
+    // remote: true →→ create js.erb to catch response
+
+* create create(destroy).js.erb in favorites-folder<br>
+  ex) alert('いいねが出来ている')<br>
+  $('#favorites_buttons_<%= @book.id %>').html("<%= j(render partial: 'favorites/favorite', locals: {book: @book}) %>");
+
+* add jquery on Gemfile, require jquery(set) on application.js
+
+<br>
+-- comment --
