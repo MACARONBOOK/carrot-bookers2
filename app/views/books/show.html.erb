@@ -18,8 +18,8 @@
           </td>
           <td><%= link_to @book.title, @book %></td>
           <td><%= @book.body %></td>
-          <div id="favorites_buttons_<%= book.id %>">
-            <%= render partial: 'favorites/favorite', locals: {book: book} %>
+          <div id="favorites_buttons_<%= @book.id %>">
+            <%= render partial: 'favorites/favorite', locals: {book: @book} %>
           </div>
         </tr>
       </table>

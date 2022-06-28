@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     resource :favorites, only: [:create, :destroy]
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  post '/books/:book_id/favorites' => 'favorites#create', as: 'create_favorite'
-  delete '/books/:book_id/favorites' => 'favorites#destroy', as: 'destroy_favorite'
+  post 'favorite/:id' => 'favorites#create', as: 'create_favorite'
+  delete 'favorite/:id' => 'favorites#destroy', as: 'destroy_favorite'
 
 end
