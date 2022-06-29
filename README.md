@@ -184,3 +184,159 @@ caution! → I use original-route to create/destroy<br>
 
 <br>
 -- comment --
+
+* create model<br><br>
+  rails g model book_comment comment:text user_id:integer book_id:integer<br>
+
+* association 3model<br>
+  user<book_comment book<book_comment
+
+* create controller<br>
+  rails g controller BookComments
+
+* write create&destroy action on BookComCon<br>
+  comment = current_user.book_comments.new(book_comment_params)<br>
+  comment.book_id = book.id<br>
+  comment.save<br>
+  redirect_to request.referer<br>
+
+  def destroy<br>
+  BookComment.find_by(id: params[:id], book_id: params[:book_id]).destroy<br>
+  redirect_to request.referer<br>
+  end<br>
+
+* add instance&method on BookCon<br>
+  before_action :authenticate_user!<br>
+  before_action :ensure_correct_user, only: [:edit, :update, :destroy]<br>
+
+  @book_comment = BookCommnet.new<br>
+
+  def ensure_correct_user<br>
+  @book = Book.find(params[:id])<br>
+  unless @book.user == current_user<br>
+  redirect_to books_path<br>
+  end<br>
+  end<br>
+
+* book_comment.rb<br>
+  validates :comment, presence: true<br>
+
+* write on books/index,show
+  コメント数: <%= book.book_comments.count %><br>
+
+* add routing(while resources :book...do~end)<br>
+  resources :book_comments,only: [:create, :destroy]<br>
+
+* create template(book_comments/_form)<br>
+  <%= form_with(model:[book, book_comment], local: true) do |f| %><br>
+  <%= f.text_area :comment, rows:'5',placeholder: "コメントをここに", class: "w-100" %><br>
+  <%= f.submit "送信する", class: "btn btn-lg btn-base-1 mt-20 pull-right" %><br>
+  <% end %>
+
+* write book_comments/_index
+
+* rewrite books/_index
+
+* rewrite books/show
+
+* change render to normal users/show
+
+
+# followed/follower function
+
+* create model<br>
+  rails g model Relationship follower_id:integer followed_id:integer<br>
+  rails db:migrate
+
+* add at relationship.rb(recognize which user to find)<br>
+  belongs_to :follower, class_name: "User"<br>
+  belongs_to :followed, class_name:"User"
+
+* add at user.rb
+
+* + following, followed relation<br>
+   has_many :relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy<br>
+   has_many :reverse_of_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
+
+* + use at index<br>
+   has_many :followings, through: :relationships, source: :followed<br>
+   has_many :followers, through: :reverse_of_relationships, source: :follower
+
+* + follow process<br>
+   def follow(user_id)<br>
+    relationships.create(followed_id: user_id)<br>
+   end<br>
+
+* + remove follow process<br>
+   def unfollow(user_id)<br>
+   relationships.find_by(followed_id: user_id).destroy<br>
+   end<br>
+
+* + judge follow or not<br>
+   def following?(user)<br>
+   followings.include?(user)<br>
+   end<br>
+
+* create controller<br>
+  rails g controller relationships followings followers<br>
+
+* add at relationships_controller.rb<br>
+
+* + following<br>
+   def create<br>
+   current_user.follow(params[:user_id])<br>
+   redirect_to request.referer<br>
+   end<br>
+
+* + remove follow<br>
+   def destroy<br>
+   current_user.unfollow(params[:user_id])<br>
+   redirect_to request.referer<br>
+   end<br>
+
+* + following-list<br>
+   def followings<br>
+   user = User.find(params[:user_id])<br>
+   @users = user.followings<br>
+   end<br>
+
+* + follower-list<br>
+   def followers<br>
+   user = User.find(params[:user_id])<br>
+   @users = user.followers<br>
+   end<br>
+
+* add >>>routing<br>
+
+* + nest<br>
+   resources :users do<br>
+   resource :relationships, only: [:create, :destroy]<br>
+   get 'followings' => 'relationships#followings', as: 'followings'<br>
+   get 'followers' => 'relationships#followers', as: 'followers'<br>
+   end
+
+* add at Views<br>
+  フォロー数: <%= user.followings.count %><br>
+  フォロワー数: <%= user.followers.count %><br>
+
+  <% unless current_user == user %><br>
+  <% if current_user.following?(user) %><br>
+   <%= link_to "フォロー外す", user_relationships_path(user.id), method: :delete %><br>
+  <% else %><br>
+   <%= link_to "フォローする", user_relationships_path(user.id), method: :post %><br>
+  <% end %><br>
+
+* write _follow_list.html.erb<br>
+  <% if users.exists? %><br>
+  <% users.each do |user| %><br>
+  table <thead <tr <th name /th> <th /th> <th /th> /tr> /thead> <br>
+  <tbody <tr <td<br>
+  <%= user.name %> td><br>
+  <td フォロー数: <%= user.followings.count %> /td><br>
+  <td フォロワー数: <%= user.followers.count %> /td><br>
+  /tr /tbody /table  % end % <br>
+   % else %  p ユーザーはいません /p  % end % <br>
+   % end %<br>
+   
+  
+ # Search function
