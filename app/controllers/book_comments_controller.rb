@@ -4,20 +4,26 @@ class BookCommentsController < ApplicationController
     book = Book.find(params[:book_id])
     comment = current_user.book_comments.new(book_comment_params)
     comment.book_id = book.id
-    if comment.save
-      flash.now[:notice] = 'コメントを投稿しました'
-      render :book_comments #render先にjsが指定される
-    else
-    　render :error
+
+    respond_to do |format|
+      if comment.save
+        format.html { redirect_to request.referer, flash.now[:notice] = 'コメントを投稿しました' }
+        format.js { render 'book_comments/create'}
+      end
     end
   end
 
   def destroy
+    refroute = Rails.application.routes.recognize_path(request.referrer)
+    @book = Book.find(refroute[:id])
     BookComment.find_by(id: params[:id], book_id: params[:book_id]).destroy
-    flash.now[:alert] = '投稿を削除しました'
-    #renderしたときに@bookのデータがないので@bookを定義
-    @book = Book.find(params[:book_id])
-    render :book_comments
+
+    respond_to do |format|
+      if book_comment.destroy
+        format.html { redirect_to request.referer, flash.now[:alert] = '投稿を削除しました' }
+        format.js { render 'book_comments/destroy'}
+      end
+    end
   end
 
   private
