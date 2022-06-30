@@ -242,7 +242,7 @@ caution! → I use original-route to create/destroy<br>
 * change render to normal users/show
 
 
-# followed/follower function
+# followed/follower_function
 
 * create model<br>
   rails g model Relationship follower_id:integer followed_id:integer<br>
@@ -339,4 +339,94 @@ caution! → I use original-route to create/destroy<br>
    % end %<br>
    
   
- # Search function
+ # Search_function
+ 
+* create controller<br>
+  rails g controller searches
+  
+* define search-action on SearchCon(conditional branch)
+* + search-model→ params[:range]、method→ params[:search]、word→ params[:word]<br>  
+  def search<br>
+   @range = params[:range]<br>
+    if @range == "User"<br>
+      @users = User.looks(params[:search], params[:word])<br>
+    else<br>
+      @books = Book.looks(params[:search], params[:word])<br>
+    end<br>
+  end<br>
+  end<br>
+  
+* add at routing  <br>
+  get 'search' => 'searches#search'
+  
+* add render on Application.html.erb(above the yield)<br>
+  <div class="d-flex justify-content-center mb-2"><br>
+    <%= render 'searches/form' %>  <br>
+  </div><br>
+
+* create template(searches/_form)
+* + conditional branch<br>
+  (f.text_field :word)<br>
+  (f.select :range)<br>
+  (f.select :search)<br>
+
+* write define on each model(user,book)(search-method-branch)<br>
+  perfect,forward,backward,partial<br>
+
+* + user.rb<br>
+  def self.looks(search, word)<br>
+    if search == "perfect_match"<br>
+      @user = User.where("name LIKE?", "#{word}")<br>
+    elsif search == "forward_match"<br>
+      @user = User.where("name LIKE?","#{word}%")<br>
+    elsif search == "backward_match"<br>
+      @user = User.where("name LIKE?","%#{word}")<br>
+    elsif search == "partial_match"<br>
+      @user = User.where("name LIKE?","%#{word}%")<br>
+    else<br>
+      @user = User.all<br>
+    end<br>
+  end<br>
+  
+* + book.rb <br>
+  def self.looks(search, word)<br>
+    if search == "perfect_match"<br>
+      @book = Book.where("title LIKE?","#{word}")<br>
+    elsif search == "forward_match"<br>
+      @book = Book.where("title LIKE?","#{word}%")<br>
+    elsif search == "backward_match"<br>
+      @book = Book.where("title LIKE?","%#{word}")<br>
+    elsif search == "partial_match"<br>
+      @book = Book.where("title LIKE?","%#{word}%")<br>
+    else<br>
+      @book = Book.all<br>
+    end<br>
+  end
+
+* write view(searches/search_result)※remove<><br>
+  h2 Results index /h2<br>
+
+  table class="table table-hover table-inverse"<br>
+  --検索対象モデルがUserの時 --<br>
+  % if @range == "User" %<br>
+    tbody<br>
+      % @users.each do |user| %<br>
+        tr<br>
+          td %= user.name % /td <br>
+        /tr<br>
+      % end %<br>
+    /tbody<br>
+  % else %<br>
+  
+   --検索対象モデルがUserではない時(= 検索対象モデルがBookの時) --<br>
+    tbody<br>
+      % @books.each do |book| %<br>
+        tr<br>
+          td %= book.title % /td<br>
+          td %= book.body % /td<br>
+        /tr<br>
+      % end %<br>
+    /tbody<br>
+  % end %<br>
+  /table<br>
+  
