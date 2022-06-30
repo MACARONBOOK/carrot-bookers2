@@ -6,6 +6,8 @@ class BooksController < ApplicationController
     @book = Book.find(params[:id])
     @new_book = Book.new
     @book_comment = BookComment.new
+    #新着順で表示
+    @comments = @book.comments.order(created_at: :desc)
     @user = @book.user
     @user_id = current_user
   end

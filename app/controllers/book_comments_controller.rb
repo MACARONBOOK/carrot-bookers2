@@ -4,13 +4,20 @@ class BookCommentsController < ApplicationController
     book = Book.find(params[:book_id])
     comment = current_user.book_comments.new(book_comment_params)
     comment.book_id = book.id
-    comment.save
-    redirect_to request.referer
+    if comment.save
+      flash.now[:notice] = 'コメントを投稿しました'
+      render :book_comments #render先にjsが指定される
+    else
+    　render :error
+    end
   end
 
   def destroy
     BookComment.find_by(id: params[:id], book_id: params[:book_id]).destroy
-    redirect_to request.referer
+    flash.now[:alert] = '投稿を削除しました'
+    #renderしたときに@bookのデータがないので@bookを定義
+    @book = Book.find(params[:book_id])
+    render :book_comments
   end
 
   private
