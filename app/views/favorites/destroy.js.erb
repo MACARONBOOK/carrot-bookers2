@@ -1,2 +1,2 @@
 alert('いいねを解除している');
-$('#favorites_buttons_<%= @book.id %>').html("<%= j(render partial: 'favorites/favorite', locals: {book: @book}) %>");
+$('#favorites_buttons_<%= @book.id %>').html("<%= j(render partial: 'favorites/btn', locals: {book: @book}) %>");

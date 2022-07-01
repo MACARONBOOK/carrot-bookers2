@@ -19,7 +19,11 @@
 </table>
 
 <div class='row'>
-  <%= link_to edit_user_path(user) do %>
-    <button type="button" class="btn btn-outline-secondary btn-lg btn-block"><i class="fas fa-user-cog fa-w-20"></i></button>
+  <% if current_user != user %>
+    <td><%= render "relationships/btn", user: user %></td>
+  <% else %>
+    <%= link_to edit_user_path(user) do %>
+      <button type="button" class="btn btn-outline-secondary btn-lg btn-block"><i class="fas fa-user-cog fa-w-20"></i></button>
+    <% end %>
   <% end %>
 </div>
