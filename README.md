@@ -430,4 +430,21 @@ caution! → I use original-route to create/destroy<br>
   % end %<br>
   /table<br>
   
-# copy_carobook2
+# Why cannot change comment-function to Ajax?
+
+-- checking flow --<br>
+* book_comments/_form → local: false<br>
+ →ok
+* book_comments_controller → have any elements of HTML<br>
+  redirect_to, format.html etc.<br>
+  →ok
+* view(write about book_comment → books/show, _index) → compare with js(create/destroy)<br>
+  $('.book-comments-index').html("<%= j(render 'book_comments/index', { book: @comment.book}) %>")<br>
+   　　　　　　　　　　　　　　　↓<br>
+  $(' class-or-id / range '). change-type ("<%= j(render 'want-to-change-this-file ', { argument }) %>")<br>
+  →warning!!<br>
+  →unify these, class or id.<br>
+  class-tag →　$(' .~~~~~ ')<br>
+  id-tag → $(' #~~~~~ ')<br>
+
+  →All clear!!<br>
