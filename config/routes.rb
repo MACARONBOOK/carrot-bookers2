@@ -14,8 +14,8 @@ Rails.application.routes.draw do
    resources :book_comments, only: [:create, :destroy]
   end
 
-  post 'favorite/:id' => 'favorites#create', as: 'create_favorite'
-  delete 'favorite/:id' => 'favorites#destroy', as: 'destroy_favorite'
+  post '/books/:book_id/favorites' => 'favorites#create', as: 'book_favorites'
+  delete '/books/:book_id/favorites' => 'favorites#destroy', as: 'destroy_favorites'
 
   get 'search'=> 'searches#search'
 
