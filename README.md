@@ -158,8 +158,8 @@ Template is missing programs.<br>
 
 * resource add at routing<br>
 caution! → I use original-route to create/destroy<br>
-  post 'favorite/:id' => 'favorites#create', as: 'create_favorite'<br>
-  delete 'favorite/:id' => 'favorites#destroy', as: 'destroy_favorite'
+  post '/books/:book_id/favorites => 'favorites#create', as: 'create_favorite'<br>
+  delete '/books/:book_id/favorites' => 'favorites#destroy', as: 'destroy_favorite'
 
 * create controller<br>
   rails g controller favorites
